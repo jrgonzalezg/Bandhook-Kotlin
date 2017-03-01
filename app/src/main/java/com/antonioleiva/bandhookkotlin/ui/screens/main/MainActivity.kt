@@ -57,6 +57,10 @@ class MainActivity : BaseActivity(), MainView {
                 .injectTo(this)
     }
 
+    override fun showUnhandledException(e: Exception) {
+        //TODO show unhandled exceptions
+    }
+
     fun init() {
         recycler.adapter = adapter
         adapter.onItemClickListener = { presenter.onArtistClicked(it) }
