@@ -75,11 +75,11 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
 
-    androidTestCompile "org.mockito:mockito-core:1.10.19"
+    androidTestCompile "org.mockito:mockito-core:2.7.13"
     androidTestCompile "com.google.dexmaker:dexmaker:1.2"
     androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.2"
     androidTestCompile "com.android.support:support-annotations:$supportVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:2.3-alpha"
 
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-core:2.7.13"

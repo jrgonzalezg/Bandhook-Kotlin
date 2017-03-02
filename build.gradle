@@ -21,7 +21,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
     }
 }
 
@@ -42,8 +44,16 @@ allprojects {
         androidVersionName = "0.1"
         supportVersion = "25.2.0"
         ankoVersion= "0.9.1a"
-        daggerVersion = "2.6"
+        daggerVersion = "2.9"
         retrofitVersion = "2.2.0"
         okhttpVersion = "3.6.0"
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}
+
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'android-reporting'

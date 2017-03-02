@@ -20,7 +20,8 @@ import android.content.Context
 import com.birbit.android.jobqueue.JobManager
 import com.birbit.android.jobqueue.config.Configuration
 
-class CustomJobManager(context: Context) : JobManager(CustomJobManager.getJobManagerConfiguration(context)) {
+class CustomJobManager(context: Context)
+: JobManager(CustomJobManager.getJobManagerConfiguration(context)) {
 
     companion object {
 

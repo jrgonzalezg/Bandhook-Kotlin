@@ -30,5 +30,6 @@ class InteractorWrapper(val interactor: Interactor, priority: InteractorPriority
 
     override fun onAdded() = Unit
     override fun onCancel(p0: Int, p1: Throwable?) = Unit
-    override fun shouldReRunOnThrowable(p0: Throwable, p1: Int, p2: Int): RetryConstraint = RetryConstraint.CANCEL
+    override fun shouldReRunOnThrowable(p0: Throwable, p1: Int, p2: Int): RetryConstraint =
+            RetryConstraint.CANCEL
 }
