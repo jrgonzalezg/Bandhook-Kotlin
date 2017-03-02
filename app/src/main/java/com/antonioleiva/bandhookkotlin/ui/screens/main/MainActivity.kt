@@ -77,7 +77,7 @@ class MainActivity : BaseActivity(), MainView {
         presenter.onPause()
     }
 
-    override fun showArtists(artists: NonEmptyList<ImageTitle>) {
+    override fun showArtists(artists: NonEmptyList<ImageTitle>) = runOnUiThread {
         adapter.items = artists.all
     }
 
