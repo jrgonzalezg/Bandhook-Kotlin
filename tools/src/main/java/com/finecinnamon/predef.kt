@@ -1,8 +1,8 @@
 @file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
 
-package com.antonioleiva.bandhookkotlin
+package com.finecinnamon
 
-import com.antonioleiva.bandhookkotlin.Result.Factory.pure
+import com.finecinnamon.Result.Factory.pure
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.functional.bind
 import nl.komponents.kovenant.task
@@ -169,27 +169,29 @@ class Result<E, A>(private val value: Promise<Disjunction<E, A>, Exception>) {
 
 }
 
-object binding {
-
-    operator fun <E, A> invoke(block: suspend (binding) -> A): Result<E, A> =
-            ResultContinuation<E, A>().also { block.startCoroutine(binding, it) }.result
-
-    private class ResultContinuation<E, A> : Continuation<A> {
-
-        lateinit var result: Result<E, A>
-
-        override val context: CoroutineContext = EmptyCoroutineContext
-
-        override fun resume(value: A) {
-            result = pure(value)
+fun <E, A> bind(block: suspend (binding) -> A): Result<E, A> =
+        Result.pure<E, Unit>(Unit).flatMap {
+            val continuation = ResultContinuation<E, A>()
+            block.startCoroutine(binding, continuation)
+            continuation.result
         }
 
-        override fun resumeWithException(exception: Throwable) {
-            if (exception is Exception)
-                result = Result.raiseUnknownError(exception)
-        }
+internal class ResultContinuation<E, A>: Continuation<A> {
+
+    lateinit var result: Result<E, A>
+
+    override val context: CoroutineContext = EmptyCoroutineContext
+
+    override fun resume(value: A) { result = pure(value) }
+
+    override fun resumeWithException(exception: Throwable) {
+        if (exception is Exception)
+            result = Result.raiseUnknownError(exception)
     }
+}
 
+
+object binding {
     infix suspend fun <E, A> binds(fa: Result<E, A>): A =
             suspendCoroutine { cont: Continuation<A> ->
                 fa.onComplete(
@@ -201,7 +203,7 @@ object binding {
 
     infix suspend fun <A> returns(fa: A): A =
             suspendCoroutine { cont: Continuation<A> ->
-                pure<Nothing, A>(fa)
+                pure<Nothing,A>(fa)
             }
 }
 
@@ -240,7 +242,7 @@ interface NonEmptyCollection<out A> : Collection<A> {
     val tail: Collection<A>
 
     override fun contains(element: @UnsafeVariance A): Boolean {
-        return (head == element).or(tail.contains(element));
+        return (head == element).or(tail.contains(element))
     }
 
     override fun containsAll(elements: Collection<@UnsafeVariance A>): Boolean =
@@ -290,5 +292,4 @@ class NonEmptyList<out A> private constructor(
         inline fun <reified A> of(head: A, vararg t: A): NonEmptyList<A> = NonEmptyList(head, t.asList())
         fun <A> unsafeFromList(l: List<A>): NonEmptyList<A> = NonEmptyList(l)
     }
-
 }
